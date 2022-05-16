@@ -3,10 +3,9 @@ package MessageWay
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
-	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 const (
@@ -20,13 +19,6 @@ const (
 	ProviderSMS3000x = 1
 	ProviderSMS2000x = 2
 	ProviderSMS9000x = 3
-)
-
-var (
-	MobileIsRequiredErr     = errors.New("mobile not found")
-	MethodIsRequiredErr     = errors.New("method not found")
-	TemplateIDIsRequiredErr = errors.New("templateID not found")
-	InvalidCountryCodeErr   = errors.New("countryCode is invalid")
 )
 
 type MessageBuilder interface {
@@ -169,10 +161,13 @@ func (m *Message) validate() error {
 }
 
 func (r *SendResponse) ToString() string {
-	return fmt.Sprintf("%+v", r)
+	if r.Status == "success" {
+		return "sending status: success\nsent : true\nreferenceID : " + r.ReferenceID
+	}
+	return "sending status: failed\nmessage : " + r.Error["message"].(string) + "\nerror code : " + strconv.FormatFloat(r.Error["code"].(float64), 'E', -1, 64)
 }
 
-func (app *App) Send(req Request) (*SendResponse, error) {
+func (app *App) Send(req Message) (*SendResponse, error) {
 	err := req.validate()
 	if err != nil {
 		return nil, err
