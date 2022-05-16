@@ -9,6 +9,14 @@ A Golang SDK for the MessageWay API.
 
 ----
 
+# Installation
+
+```shell
+$ go get github.com/MessageWay/MessageWayGolang
+```
+
+---
+
 ## Send Message
 
 ### Via SMS
