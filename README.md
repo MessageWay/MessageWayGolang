@@ -116,6 +116,59 @@ func main() {
 
 ---
 
+## Get Status
+
+```go
+package main
+
+import (
+	"fmt"
+	MessageWay "github.com/MessageWay/MessageWayGolang"
+)
+
+func main() {
+	app := MessageWay.New(MessageWay.Config{
+		ApiKey: "YOUR_APIKEY",
+	})
+	res, err := app.GetStatus(MessageWay.StatusRequest{
+		ReferenceID: "1234567890",
+	})
+	if err != nil {
+		return
+	}
+	fmt.Println(res)
+}
+```
+
+---
+
+## Verify OTP
+
+```go
+package main
+
+import (
+	"fmt"
+	MessageWay "github.com/MessageWay/MessageWayGolang"
+)
+
+func main() {
+	app := MessageWay.New(MessageWay.Config{
+		ApiKey: "YOUR_APIKEY",
+	})
+	res, err := app.Verify(MessageWay.OTPVerifyRequest{
+		Mobile: "9123456789",
+		OTP:    "123456",
+	})
+	if err != nil {
+		return
+	}
+	fmt.Println(res)
+}
+```
+
+---
+
 ## License
 
 MIT
