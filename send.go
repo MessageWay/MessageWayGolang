@@ -31,6 +31,7 @@ type MessageBuilder interface {
 	ViaSMS2000x() MessageBuilder
 	ViaSMS9000x() MessageBuilder
 	ViaIVR() MessageBuilder
+	SetCode(code string) MessageBuilder
 	SetParams(params ...string) MessageBuilder
 	Build() Message
 }
@@ -130,6 +131,11 @@ func (b Builder) ViaSMS9000x() MessageBuilder {
 func (b Builder) ViaIVR() MessageBuilder {
 	b.message.Method = MethodIVR
 	b.message.Provider = ProviderIVR
+	return b
+}
+
+func (b Builder) SetCode(code string) MessageBuilder {
+	b.message.Code = code
 	return b
 }
 
