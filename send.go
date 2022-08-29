@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 type MessageBuilder interface {
@@ -23,7 +24,7 @@ type MessageBuilder interface {
 	SetProvider(provider int) MessageBuilder
 	SetParams(params ...string) MessageBuilder
 	Build() Message
-	Via(by Method) MessageBuilder
+	Via(by string) MessageBuilder
 }
 
 type Message struct {
@@ -124,21 +125,21 @@ func (b Builder) ViaIVR() MessageBuilder {
 	return b
 }
 
-func (b Builder) Via(by Method) MessageBuilder {
-	switch by {
-	case SMS:
+func (b Builder) Via(by string) MessageBuilder {
+	switch strings.ToLower(by) {
+	case "sms":
 		return b.SetMethod(MethodSMS)
-	case SMS2000x:
+	case "sms2000x":
 		return b.SetMethod(MethodSMS).SetProvider(ProviderSMS2000x)
-	case SMS3000x:
+	case "sms3000x":
 		return b.SetMethod(MethodSMS).SetProvider(ProviderSMS3000x)
-	case SMS9000x:
+	case "sms9000x":
 		return b.SetMethod(MethodSMS).SetProvider(ProviderSMS9000x)
-	case WHATSAPP:
+	case "whatsapp":
 		return b.SetMethod(MethodMessenger).SetProvider(ProviderWhatsapp)
-	case GAP:
+	case "gap":
 		return b.SetMethod(MethodMessenger).SetProvider(ProviderGap)
-	case IVR:
+	case "ivr":
 		return b.SetMethod(MethodIVR)
 	default:
 		return b
