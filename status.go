@@ -8,10 +8,6 @@ import (
 	"strconv"
 )
 
-const (
-	StatusUrl = ApiBaseUrl + "/status"
-)
-
 type StatusRequest struct {
 	ReferenceID string `json:"OTPReferenceID"`
 }

@@ -8,10 +8,6 @@ import (
 	"strconv"
 )
 
-const (
-	OTPVerifyUrl = ApiBaseUrl + "/otp/verify"
-)
-
 type OTPVerifyRequest struct {
 	OTP         string `json:"otp"`
 	CountryCode int    `json:"countryCode"`

@@ -8,19 +8,6 @@ import (
 	"strconv"
 )
 
-const (
-	SendUrl          = ApiBaseUrl + "/send"
-	MethodMessenger  = "messenger"
-	MethodSMS        = "sms"
-	MethodIVR        = "ivr"
-	ProviderIVR      = 1
-	ProviderWhatsapp = 1
-	ProviderGap      = 2
-	ProviderSMS3000x = 1
-	ProviderSMS2000x = 2
-	ProviderSMS9000x = 3
-)
-
 type MessageBuilder interface {
 	SetMobile(mobile string, countryCode ...int) MessageBuilder
 	SetCountryCode(countryCode int) MessageBuilder
@@ -36,6 +23,7 @@ type MessageBuilder interface {
 	SetProvider(provider int) MessageBuilder
 	SetParams(params ...string) MessageBuilder
 	Build() Message
+	Via(by Method) MessageBuilder
 }
 
 type Message struct {
@@ -134,6 +122,27 @@ func (b Builder) ViaIVR() MessageBuilder {
 	b.message.Method = MethodIVR
 	b.message.Provider = ProviderIVR
 	return b
+}
+
+func (b Builder) Via(by Method) MessageBuilder {
+	switch by {
+	case SMS:
+		return b.SetMethod(MethodSMS)
+	case SMS2000x:
+		return b.SetMethod(MethodSMS).SetProvider(ProviderSMS2000x)
+	case SMS3000x:
+		return b.SetMethod(MethodSMS).SetProvider(ProviderSMS3000x)
+	case SMS9000x:
+		return b.SetMethod(MethodSMS).SetProvider(ProviderSMS9000x)
+	case WHATSAPP:
+		return b.SetMethod(MethodMessenger).SetProvider(ProviderWhatsapp)
+	case GAP:
+		return b.SetMethod(MethodMessenger).SetProvider(ProviderGap)
+	case IVR:
+		return b.SetMethod(MethodIVR)
+	default:
+		return b
+	}
 }
 
 func (b Builder) SetCode(code string) MessageBuilder {
