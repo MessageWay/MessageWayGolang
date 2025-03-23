@@ -13,6 +13,7 @@ type MessageBuilder interface {
 	SetMobile(mobile string, countryCode ...int) MessageBuilder
 	SetCountryCode(countryCode int) MessageBuilder
 	SetTemplateID(templateID int) MessageBuilder
+	SetLength(length int) MessageBuilder
 	ViaGap() MessageBuilder
 	ViaWhatsapp() MessageBuilder
 	ViaSMS3000x() MessageBuilder
@@ -86,6 +87,11 @@ func (b Builder) SetCountryCode(countryCode int) MessageBuilder {
 
 func (b Builder) SetTemplateID(templateID int) MessageBuilder {
 	b.message.TemplateID = templateID
+	return b
+}
+
+func (b Builder) SetLength(length int) MessageBuilder {
+	b.message.Length = length
 	return b
 }
 
