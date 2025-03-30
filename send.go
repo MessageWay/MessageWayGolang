@@ -14,6 +14,7 @@ type MessageBuilder interface {
 	SetCountryCode(countryCode int) MessageBuilder
 	SetTemplateID(templateID int) MessageBuilder
 	SetLength(length int) MessageBuilder
+	SetApiKey(apiKey string) MessageBuilder
 	ViaGap() MessageBuilder
 	ViaWhatsapp() MessageBuilder
 	ViaSMS3000x() MessageBuilder
@@ -55,6 +56,9 @@ type Message struct {
 
 	//if you want your otp could be expired, set ExpireTime as second.
 	ExpireTime int64
+
+	//ApiKey is optional.
+	ApiKey string
 }
 
 type Builder struct {
@@ -92,6 +96,11 @@ func (b Builder) SetTemplateID(templateID int) MessageBuilder {
 
 func (b Builder) SetLength(length int) MessageBuilder {
 	b.message.Length = length
+	return b
+}
+
+func (b Builder) SetApiKey(apiKey string) MessageBuilder {
+	b.message.ApiKey = apiKey
 	return b
 }
 
@@ -216,7 +225,12 @@ func (app *App) Send(req Message) (*SendResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-	request.Header.Add("apiKey", app.config.ApiKey)
+
+	apiKey := app.config.ApiKey
+	if req.ApiKey != "" {
+		apiKey = req.ApiKey
+	}
+	request.Header.Add("apiKey", apiKey)
 	if app.config.AcceptLanguage == "" {
 		app.config.AcceptLanguage = "fa"
 	}
