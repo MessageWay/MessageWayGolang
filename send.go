@@ -22,6 +22,7 @@ type MessageBuilder interface {
 	ViaSMS9000x() MessageBuilder
 	ViaIVR() MessageBuilder
 	SetCode(code string) MessageBuilder
+	SetHash(hash string) MessageBuilder
 	SetMethod(method string) MessageBuilder
 	SetProvider(provider int) MessageBuilder
 	SetParams(params ...string) MessageBuilder
@@ -59,6 +60,9 @@ type Message struct {
 
 	//ApiKey is optional.
 	ApiKey string
+
+	// Hash is optional
+	Hash string
 }
 
 type Builder struct {
@@ -166,6 +170,11 @@ func (b Builder) SetCode(code string) MessageBuilder {
 	return b
 }
 
+func (b Builder) SetHash(hash string) MessageBuilder {
+	b.message.Hash = hash
+	return b
+}
+
 func (b Builder) SetMethod(method string) MessageBuilder {
 	b.message.Method = method
 	return b
@@ -199,6 +208,9 @@ func (m *Message) validate() error {
 	}
 	if m.TemplateID <= 0 {
 		return TemplateIDIsRequiredErr
+	}
+	if m.Hash != "" && !isValidHash(m.Hash) {
+		return InvalidHashFormatErr
 	}
 	return nil
 }
