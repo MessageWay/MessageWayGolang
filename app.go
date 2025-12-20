@@ -11,6 +11,11 @@ func New(c Config) *App {
 	if c.ApiKey == "" {
 		panic("apiKey not set")
 	}
+
+	if c.Timeout <= 0 {
+		c.Timeout = DefaultTimeOut * time.Second
+	}
+
 	app := &App{config: c}
 
 	t := http.DefaultTransport.(*http.Transport).Clone()
@@ -19,7 +24,7 @@ func New(c Config) *App {
 	t.MaxIdleConnsPerHost = 5
 
 	app.client = &http.Client{
-		Timeout:   5 * time.Second,
+		Timeout:   c.Timeout,
 		Transport: t,
 	}
 	return app

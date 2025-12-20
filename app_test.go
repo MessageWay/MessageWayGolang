@@ -1,9 +1,11 @@
 package MessageWay_test
 
 import (
-	MessageWay "github.com/MessageWay/MessageWayGolang"
 	"os"
 	"testing"
+	"time"
+
+	MessageWay "github.com/MessageWay/MessageWayGolang"
 )
 
 var ApiKey string
@@ -14,7 +16,8 @@ func init() {
 
 func TestSend(t *testing.T) {
 	app := MessageWay.New(MessageWay.Config{
-		ApiKey: ApiKey,
+		ApiKey:  ApiKey,
+		Timeout: 5 * time.Second,
 	})
 	message := MessageWay.NewBuilder().SetMobile("09123456789").SetParams("foo", "doo", "loo").ViaWhatsapp().Build()
 	res, err := app.Send(message)
