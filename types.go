@@ -1,10 +1,14 @@
 package MessageWay
 
-import "net/http"
+import (
+	"net/http"
+	"time"
+)
 
 type Config struct {
-	ApiKey string
+	ApiKey         string
 	AcceptLanguage string
+	Timeout        time.Duration
 }
 
 type App struct {

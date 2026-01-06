@@ -14,4 +14,5 @@ const (
 	ProviderSMS3000x = 1
 	ProviderSMS2000x = 2
 	ProviderSMS9000x = 3
+	DefaultTimeOut   = 5
 )
